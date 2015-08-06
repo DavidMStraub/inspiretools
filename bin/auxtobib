@@ -6,7 +6,7 @@ import inspiretools
 import pyinspire
 
 parser = argparse.ArgumentParser()
-parser.add_argument("file", help="bla",type=str)
+parser.add_argument("file", help="LaTeX .aux file",type=str)
 args = parser.parse_args()
 
 texkeys =  inspiretools.aux2texkey(args.file)
