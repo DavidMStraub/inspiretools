@@ -7,5 +7,5 @@ setup(name='inspiretools',
       install_requires=[
 
       ],
-      scripts=['bin/auxtobib']
+      scripts=['bin/auxtobib','bin/auxtoxml']
       )

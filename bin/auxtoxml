@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+import inspiretools
+import pyinspire
+from lxml import etree as et
+
+parser = argparse.ArgumentParser()
+parser.add_argument("file", help="LaTeX .aux file",type=str)
+args = parser.parse_args()
+
+texkeys =  inspiretools.aux2texkey(args.file)
+
+err=''
+notfound=''
+first = True
+for texkey in texkeys:
+    try:
+        bib = pyinspire.get_text_from_inspire('texkey ' + texkey, 'marcxml',
+                                              ot=245)
+        data = et.fromstring(bib.encode("utf-8"))
+        if data.find('{http://www.loc.gov/MARC21/slim}record') is not None:
+            if first:
+                xml = data
+                first = False
+            else:
+                xml.extend(data)
+
+        else:
+            notfound  += texkey + '\n'
+    except KeyboardInterrupt:
+        print('The reference extraction has been aborted before completion.')
+        break
+    except:
+        err += texkey + '\n'
+
+if not first:
+    print(et.tostring(xml, pretty_print=True).decode("utf-8"))
+
+if err != '':
+    print('The following references could not be extracted due to errors:\n')
+    print(err)
+
+if notfound != '':
+    print('The following references could not be found on INSPIRE:\n')
+    print(notfound)
