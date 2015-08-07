@@ -1,12 +1,16 @@
 import re
 import os
 import pyinspire
+import logging
 from lxml import etree as et
+
+log = logging.getLogger('inspiretools')
+log.setLevel(logging.INFO)
 
 def aux2texkey(filename):
     keys=[]
     if not os.path.exists(filename):
-        print("Error: file " + filename + " not found.")
+        log.error("File " + filename + " not found.")
         return keys
     with open(filename,'r') as f:
         lines = f.readlines()
@@ -24,40 +28,61 @@ def aux2texkey(filename):
 def onabort():
     print('The reference extraction has been aborted before completion.')
 
-def atend(err, notfound):
+def onerr(err, texkey):
+    err += texkey + '\n'
+    log.error('There was an error in trying'
+                  ' to look up reference ' + texkey +  '.')
+    return err
+
+def onnotfound(notfound, texkey):
+    notfound  += texkey + '\n'
+    log.info('Reference ' + texkey + ' not found on INSPIRE!')
+    return notfound
+
+def atend(err, notfound, before='', after=''):
+    if err =='' and notfound=='':
+        return
+    print(before)
     if err != '':
         print('The following references could not be extracted due to errors:\n')
         print(err)
-
     if notfound != '':
         print('The following references could not be found on INSPIRE:\n')
         print(notfound)
+    print(after)
 
 
 def texkey2bib(texkeys):
+    tot = len(texkeys)
     err=''
     notfound=''
-    for texkey in texkeys:
+    for i, texkey in enumerate(texkeys):
         try:
+            log.info('Looking up reference ' + str(i+1)
+                         + ' of ' + str(tot))
             bib = pyinspire.get_text_from_inspire('texkey ' + texkey, 'bibtex')
             if bib != '':
                 print(bib)
+                log.info('Success.')
             else:
-                notfound  += texkey + '\n'
+                notfound = onnotfound(notfound, texkey)
         except KeyboardInterrupt:
             onabort()
             break
         except:
-            err += texkey + '\n'
+            err = onerr(err, texkey)
     atend(err, notfound)
 
 
 def texkey2xml(texkeys, tags=245):
+    tot = len(texkeys)
     err=''
     notfound=''
     first = True
-    for texkey in texkeys:
+    for i, texkey in enumerate(texkeys):
         try:
+            log.info('Looking up reference ' + str(i+1)
+                         + ' of ' + str(tot))
             bib = pyinspire.get_text_from_inspire('texkey ' + texkey, 'marcxml',
                                                   ot=tags)
             data = et.fromstring(bib.encode("utf-8"))
@@ -67,16 +92,17 @@ def texkey2xml(texkeys, tags=245):
                     first = False
                 else:
                     xml.extend(data)
+                log.info('Success.')
 
             else:
-                notfound  += texkey + '\n'
+                notfound = onnotfound(notfound, texkey)
         except KeyboardInterrupt:
             onabort()
             break
         except:
-            err += texkey + '\n'
+            err = onerr(err, texkey)
 
     if not first:
         print(et.tostring(xml, pretty_print=True).decode("utf-8"))
 
-    atend(err, notfound)
+    atend(err, notfound, '<!--\n','-->')
