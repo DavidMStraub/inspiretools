@@ -1,6 +1,6 @@
 # INSPIRE tools
 
-This Python 3 package provides two sciprts, `auxtobib` and `auxtoxml`, which take a LaTeX `.aux` file as input. 
+This Python 3 package provides two scripts, `auxtobib` and `auxtoxml`, which take a LaTeX `.aux` file as input. 
 `auxtobib` fetches the `bibtex` entries for all the articles cited in the document from
 [INSPIRE](http://inspirehep.net/). `auxtoxml` return an XML file containing the titles of the articles.
 
