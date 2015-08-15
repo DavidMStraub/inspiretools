@@ -1,9 +1,8 @@
 # INSPIRE tools
 
-At the moment, this Python 3 package provides a single tool, namely a script
-`auxtobib` that takes a LaTeX `.aux` file as input and fetches the `bibtex`
-entries for all the articles cited in the document from
-[INSPIRE](http://inspirehep.net/)
+This Python 3 package provides two sciprts, `auxtobib` and `auxtoxml`, which take a LaTeX `.aux` file as input. 
+`auxtobib` fetches the `bibtex` entries for all the articles cited in the document from
+[INSPIRE](http://inspirehep.net/). `auxtoxml` return an XML file containing the titles of the articles.
 
 ## Installation
 
@@ -28,4 +27,8 @@ and the `bibtex` entries will be printed to `stdout`. If you want to save them
 into a `.bib` file, simply use
 ```
 auxtobib paper.aux > bibliography.bib
+```
+The script to generate an XML file works analogously,
+```
+auxtoxml paper.aux > bibliography.xml
 ```
