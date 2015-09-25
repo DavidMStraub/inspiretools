@@ -15,7 +15,7 @@ pip3 install . --user
 
 ## Requirements
 
-The script was tested with Python 3.4. It requires `pyinspire`.
+The script was tested with Python 3.4. It uses `pyinspire`, see https://bitbucket.org/ihuston/pyinspire.
 
 ## Usage
 

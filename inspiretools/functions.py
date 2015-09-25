@@ -1,6 +1,6 @@
 import re
 import os
-import pyinspire
+from . import pyinspire
 import logging
 from lxml import etree as et
 
