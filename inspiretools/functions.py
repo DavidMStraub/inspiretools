@@ -7,6 +7,12 @@ from lxml import etree as et
 log = logging.getLogger('inspiretools')
 log.setLevel(logging.INFO)
 
+# blacklister citation keys
+blacklisted_keys = [
+    # from using revtex-4.1
+    'REVTEX41Control', 'apsrev41Control'
+]
+
 def aux2texkey(filename):
     keys=[]
     if not os.path.exists(filename):
@@ -23,6 +29,8 @@ def aux2texkey(filename):
     keys = [item for sublist in keys for item in sublist]
     # remove duplicates
     keys = list(set(keys))
+    # remove blacklisted keys
+    keys = [x for x in keys if x not in blacklisted_keys]
     return keys
 
 def onabort():
