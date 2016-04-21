@@ -7,5 +7,5 @@ setup(name='inspiretools',
       install_requires=[
         "beautifulsoup4"
       ],
-      scripts=['bin/auxtobib','bin/auxtoxml'],
+      scripts=['bin/auxtobib','bin/auxtoxml','bin/blgtobib'],
       )

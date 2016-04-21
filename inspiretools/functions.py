@@ -33,6 +33,27 @@ def aux2texkey(filename):
     keys = [x for x in keys if x not in blacklisted_keys]
     return keys
 
+def blg2texkey(filename):
+    keys=[]
+    if not os.path.exists(filename):
+        log.error("File " + filename + " not found.")
+        return keys
+    with open(filename,'r') as f:
+        lines = f.readlines()
+    # regexp to match 'Warning--I didn\'t find a database entry for "..."' (bibtex)
+    # or ? {...} (biber)
+    pattern = re.compile(r'^Warning--I didn\'t find a database entry for \"(?P<keys>[^\"]+)\"')
+    # get nested list of texkeys
+    keys = [re.search(pattern, c).group('keys').split(',')
+            for c in lines if re.match(pattern, c)]
+    # flatten nested list
+    keys = [item for sublist in keys for item in sublist]
+    # remove duplicates
+    keys = list(set(keys))
+    # remove blacklisted keys
+    keys = [x for x in keys if x not in blacklisted_keys]
+    return keys
+
 def onabort():
     print('The reference extraction has been aborted before completion.')
 
