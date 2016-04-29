@@ -32,3 +32,11 @@ The script to generate an XML file works analogously,
 ```
 auxtoxml paper.aux > bibliography.xml
 ```
+
+The script `blgtobib` will fetch only `bibtex` entries which are not already in
+the `.bib` file associated with your project. It uses the `bibtex` log file
+associated with the LaTeX project. For example,
+```
+blgtobib paper.blg >> bibliography.bib
+```
+will append new entries to `bibliography.bib`.
