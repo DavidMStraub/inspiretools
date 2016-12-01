@@ -41,8 +41,8 @@ def blg2texkey(filename):
     with open(filename,'r') as f:
         lines = f.readlines()
     # regexp to match 'Warning--I didn\'t find a database entry for "..."' (bibtex)
-    # or ? {...} (biber)
-    pattern = re.compile(r'^Warning--I didn\'t find a database entry for \"(?P<keys>[^\"]+)\"')
+    # or 'WARN - I didn\'t find a database entry for '...'' (biber)
+    pattern = re.compile(r'.*I didn\'t find a database entry for [\"\'](?P<keys>[^\"]+)[\"\'].*')
     # get nested list of texkeys
     keys = [re.search(pattern, c).group('keys').split(',')
             for c in lines if re.match(pattern, c)]
