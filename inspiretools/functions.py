@@ -3,6 +3,7 @@ import os
 from . import pyinspire
 import logging
 from lxml import etree as et
+import argparse
 
 log = logging.getLogger('inspiretools')
 log.setLevel(logging.INFO)
@@ -135,3 +136,27 @@ def texkey2xml(texkeys, tags=245):
         print(et.tostring(xml, pretty_print=True).decode("utf-8"))
 
     atend(err, notfound, '<!--\n','-->')
+
+
+def aux2bib():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", help="LaTeX .aux file",type=str)
+    args = parser.parse_args()
+    texkeys = aux2texkey(args.file)
+    texkey2bib(texkeys)
+
+
+def aux2xml():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", help="LaTeX .aux file",type=str)
+    args = parser.parse_args()
+    texkeys = aux2texkey(args.file)
+    texkey2xml(texkeys)
+
+
+def blg2bib():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", help="BibTeX .blg file", type=str)
+    args = parser.parse_args()
+    texkeys = blg2texkey(args.file)
+    texkey2bib(texkeys)
