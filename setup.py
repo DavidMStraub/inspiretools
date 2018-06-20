@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='inspiretools',
-      version='0.1',
+      version='0.2',
       url='https://github.com/DavidMStraub/inspire-tools',
       author='David M. Straub',
       packages=['inspiretools'],
