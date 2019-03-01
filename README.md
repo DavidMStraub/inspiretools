@@ -1,21 +1,20 @@
 # INSPIRE tools
 
-This Python 3 package provides two scripts, `auxtobib` and `auxtoxml`, which take a LaTeX `.aux` file as input. 
+This Python 3 package provides two scripts, `auxtobib` and `auxtoxml`, which take a LaTeX `.aux` file as input.
 `auxtobib` fetches the `bibtex` entries for all the articles cited in the document from
 [INSPIRE](http://inspirehep.net/). `auxtoxml` return an XML file containing the titles of the articles.
 
 ## Installation
 
 
-To install the package in your home directory, execute the following command in
-the package's root directory,
+To install the package in your home directory, run
 ```
-pip3 install . --user
+python3 -m pip install inspiretools --user
 ```
 
 ## Requirements
 
-The script was tested with Python 3.4. It uses `pyinspire`, see https://bitbucket.org/ihuston/pyinspire.
+The script requires Python 3.4+. It uses `pyinspire`, see https://bitbucket.org/ihuston/pyinspire.
 
 ## Usage
 
