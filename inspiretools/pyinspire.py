@@ -22,7 +22,7 @@ import logging
 import re
 
 __version__ = "0.3.0"
-APIURL = "http://inspirehep.net/search?"
+APIURL = "http://old.inspirehep.net/search?"
 logging.basicConfig()
 log = logging.getLogger("pyinspire")
 
