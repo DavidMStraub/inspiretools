@@ -1,8 +1,8 @@
 # INSPIRE tools
 
-This Python 3 package provides two scripts, `auxtobib` and `auxtoxml`, which take a LaTeX `.aux` file as input.
+This Python 3 package provides two scripts, `auxtobib` and `blgtobib`, which take a LaTeX `.aux` or `.blg` file as input.
 `auxtobib` fetches the `bibtex` entries for all the articles cited in the document from
-[INSPIRE](http://inspirehep.net/). `auxtoxml` return an XML file containing the titles of the articles.
+[INSPIRE](http://inspirehep.net/). `blgtobib` does the same, but only fetches those entries which are missing.
 
 ## Installation
 
@@ -14,7 +14,7 @@ python3 -m pip install inspiretools --user
 
 ## Requirements
 
-The script requires Python 3.4+. It uses `pyinspire`, see https://bitbucket.org/ihuston/pyinspire.
+The script requires Python 3.5+.
 
 ## Usage
 
@@ -26,10 +26,6 @@ and the `bibtex` entries will be printed to `stdout`. If you want to save them
 into a `.bib` file, simply use
 ```
 auxtobib paper.aux > bibliography.bib
-```
-The script to generate an XML file works analogously,
-```
-auxtoxml paper.aux > bibliography.xml
 ```
 
 The script `blgtobib` will fetch only `bibtex` entries which are not already in

@@ -1,9 +1,8 @@
 import re
 import os
-from . import pyinspire
 import logging
-from lxml import etree as et
 import argparse
+import requests
 
 log = logging.getLogger('inspiretools')
 log.setLevel(logging.INFO)
@@ -90,7 +89,8 @@ def texkey2bib(texkeys):
         try:
             log.info('Looking up reference ' + str(i+1)
                          + ' of ' + str(tot))
-            bib = pyinspire.get_text_from_inspire('texkey ' + texkey, 'bibtex')
+            inspire_query_params = {'q': 'texkey=' + texkey, 'format': 'bibtex'}
+            bib = requests.get('https://inspirehep.net/api/literature?', params=inspire_query_params).text
             if bib != '':
                 print(bib)
                 log.info('Success.')
@@ -104,54 +104,12 @@ def texkey2bib(texkeys):
     atend(err, notfound)
 
 
-def texkey2xml(texkeys, tags=245):
-    tot = len(texkeys)
-    err=''
-    notfound=''
-    first = True
-    for i, texkey in enumerate(texkeys):
-        try:
-            log.info('Looking up reference ' + str(i+1)
-                         + ' of ' + str(tot))
-            bib = pyinspire.get_text_from_inspire('texkey ' + texkey, 'marcxml',
-                                                  ot=tags)
-            data = et.fromstring(bib.encode("utf-8"))
-            if data.find('{http://www.loc.gov/MARC21/slim}record') is not None:
-                if first:
-                    xml = data
-                    first = False
-                else:
-                    xml.extend(data)
-                log.info('Success.')
-
-            else:
-                notfound = onnotfound(notfound, texkey)
-        except KeyboardInterrupt:
-            onabort()
-            break
-        except:
-            err = onerr(err, texkey)
-
-    if not first:
-        print(et.tostring(xml, pretty_print=True).decode("utf-8"))
-
-    atend(err, notfound, '<!--\n','-->')
-
-
 def aux2bib():
     parser = argparse.ArgumentParser()
     parser.add_argument("file", help="LaTeX .aux file",type=str)
     args = parser.parse_args()
     texkeys = aux2texkey(args.file)
     texkey2bib(texkeys)
-
-
-def aux2xml():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("file", help="LaTeX .aux file",type=str)
-    args = parser.parse_args()
-    texkeys = aux2texkey(args.file)
-    texkey2xml(texkeys)
 
 
 def blg2bib():
