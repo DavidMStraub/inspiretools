@@ -35,3 +35,6 @@ associated with the LaTeX project. For example,
 blgtobib paper.blg >> bibliography.bib
 ```
 will append new entries to `bibliography.bib`.
+
+By default, both commands use the current TeX key returned by INSPIRE. Pass
+`--keep-old-texkeys` to preserve the original key from the `.aux` or `.blg` file.

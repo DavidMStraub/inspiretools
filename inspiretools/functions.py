@@ -81,7 +81,7 @@ def onnotfound(notfound, texkey):
     return notfound
 
 
-def texkey2bib(texkeys):
+def texkey2bib(texkeys, keep_old_texkeys=False):
     """Fetch BibTeX entry given TeX keys."""
     tot = len(texkeys)
     err = []
@@ -95,6 +95,15 @@ def texkey2bib(texkeys):
             res.raise_for_status()
             bib = res.text
             if bib != "":
+                if keep_old_texkeys:
+                    inspire_texkey = bib.split("\n")[0].split("{")[1].split(",")[0]
+                    if inspire_texkey != texkey:
+                        LOGGER.warning(
+                            "The TeX key %s was found on INSPIRE with the updated key %s, bibtex printed with old key",
+                            texkey,
+                            inspire_texkey
+                        )
+                        bib = bib.replace(inspire_texkey, texkey, count=1)
                 print(bib)
                 LOGGER.info("Success.")
             else:
@@ -124,15 +133,25 @@ def aux2bib():
     """Generate bibliography from .aux file."""
     parser = argparse.ArgumentParser()
     parser.add_argument("file", help="LaTeX .aux file", type=str)
+    parser.add_argument(
+        "--keep-old-texkeys",
+        help="Keep the original TeX keys instead of using current INSPIRE keys",
+        action="store_true",
+    )
     args = parser.parse_args()
     texkeys = aux2texkey(args.file)
-    texkey2bib(texkeys)
+    texkey2bib(texkeys, keep_old_texkeys=args.keep_old_texkeys)
 
 
 def blg2bib():
     """Generate bibliography from .blg file."""
     parser = argparse.ArgumentParser()
     parser.add_argument("file", help="BibTeX .blg file", type=str)
+    parser.add_argument(
+        "--keep-old-texkeys",
+        help="Keep the original TeX keys instead of using current INSPIRE keys",
+        action="store_true",
+    )
     args = parser.parse_args()
     texkeys = blg2texkey(args.file)
-    texkey2bib(texkeys)
+    texkey2bib(texkeys, keep_old_texkeys=args.keep_old_texkeys)
